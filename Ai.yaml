@@ -1,11 +1,11 @@
 # NAME: AI
-# UPDATED: 
-# DOMAIN: 
-# DOMAIN-KEYWORD: 
-# DOMAIN-SUFFIX: 
-# PROCESS-NAME: 
-# IP-CIDR: 
-# TOTAL:
+# UPDATED: 2026-09-18
+# DOMAIN: 23
+# DOMAIN-KEYWORD: 0
+# DOMAIN-SUFFIX: 100
+# PROCESS-NAME: 0
+# IP-CIDR: 0
+# TOTAL: 123
 payload:
 # > Ai general rules
   - DOMAIN,api.statsig.com
