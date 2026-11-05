@@ -50,9 +50,15 @@ def is_cn_domain(line: str) -> bool:
 
 
 def main():
-    print(f"⏳ Downloading: {SOURCE_URL}")
-    with urllib.request.urlopen(SOURCE_URL, timeout=30) as resp:
-        content = resp.read().decode("utf-8")
+print(f"⏳ Downloading: {SOURCE_URL}")
+req = urllib.request.Request(
+    SOURCE_URL,
+    headers={
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+    }
+)
+with urllib.request.urlopen(req, timeout=30) as resp:
+    content = resp.read().decode("utf-8")
 
     lines = content.splitlines()
     proxy_rules = []
