@@ -9,6 +9,7 @@ SOURCE_URL = "https://magicrule.pages.dev/data/_shared/artifacts/GlobalAI_rules_
 OUTPUT_FILE = "AI.list"
 POLICY_GROUP = "AI"
 
+# 国内不需要代理的关键词
 CN_KEYWORDS = [
     "baidu.com", "baidubce.com", "ernie.baidu", "yiyan.baidu", "qianfan.baidu",
     "aliyun.com", "aliyuncs.com", "dashscope", "bailian.console.aliyun",
@@ -39,6 +40,14 @@ CN_KEYWORDS = [
     "api.minimaxi.com",
 ]
 
+# 只保留跨平台通用规则类型（苹果 + PC 都支持）
+SUPPORTED_TYPES = (
+    "HOST,", "HOST-SUFFIX,", "HOST-KEYWORD,",
+    "DOMAIN,", "DOMAIN-SUFFIX,", "DOMAIN-KEYWORD,",
+    "IP-CIDR,", "IP-CIDR6,", "IP6-CIDR,",
+    "IP-ASN,",
+)
+
 
 def is_cn_domain(line: str) -> bool:
     line_lower = line.lower()
@@ -51,14 +60,12 @@ def is_cn_domain(line: str) -> bool:
 
 def main():
     print(f"⏳ Downloading: {SOURCE_URL}")
-
     req = urllib.request.Request(
         SOURCE_URL,
         headers={
             "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
         }
     )
-
     with urllib.request.urlopen(req, timeout=30) as resp:
         content = resp.read().decode("utf-8")
 
@@ -70,9 +77,17 @@ def main():
         line = line.strip()
         if not line or line.startswith("#"):
             continue
+
+        # 跳过不支持的类型（process-name、user-agent 等）
+        if not line.startswith(SUPPORTED_TYPES):
+            removed += 1
+            continue
+
         if is_cn_domain(line):
             removed += 1
             continue
+
+        # 统一策略组 + 转换成通用 DOMAIN 格式
         new_line = re.sub(r',GlobalAI$', f',{POLICY_GROUP}', line)
         new_line = new_line.replace("HOST-SUFFIX,", "DOMAIN-SUFFIX,")
         new_line = new_line.replace("HOST-KEYWORD,", "DOMAIN-KEYWORD,")
@@ -83,9 +98,10 @@ def main():
     header = f"""# NAME: AI
 # SOURCE: MagicRule GlobalAI (auto filtered)
 # UPDATED: {now}
-# NOTE: 已自动移除国内不需要代理的域名
-# RULES: {len(proxy_rules)} (removed {removed} CN domains)
+# NOTE: 已自动移除国内域名 + 不支持的规则类型（仅保留苹果/PC通用格式）
+# RULES: {len(proxy_rules)} (removed {removed})
 # POLICY: {POLICY_GROUP}
+# COMPATIBLE: Quantumult X / Surge / Stash / Loon / Clash / Mihomo / sing-box
 
 """
 
@@ -94,7 +110,7 @@ def main():
         f.write("\n".join(proxy_rules))
         f.write("\n")
 
-    print(f"✅ Done. Kept {len(proxy_rules)} rules, removed {removed} CN domains")
+    print(f"✅ Done. Kept {len(proxy_rules)} rules, removed {removed}")
 
 
 if __name__ == "__main__":
