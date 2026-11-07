@@ -94,7 +94,8 @@ def main():
         new_line = new_line.replace("HOST,", "DOMAIN,")
         proxy_rules.append(new_line)
 
-    now = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M:%S UTC")
+    from datetime import datetime, timezone, timedelta
+    now = (datetime.now(timezone.utc) + timedelta(hours=8)).strftime("%Y-%m-%d %H:%M:%S")
     header = f"""# NAME: AI
 # SOURCE: MagicRule GlobalAI (auto filtered)
 # UPDATED: {now}
@@ -105,7 +106,7 @@ def main():
 
 """
 
-    with open(OUTPUT_FILE, "w", encoding="utf-8") as f:
+     with open(OUTPUT_FILE, "w", encoding="utf-8") as f:
         f.write(header)
         f.write("\n".join(proxy_rules))
         f.write("\n")
