@@ -3,7 +3,7 @@
 
 import urllib.request
 import re
-from datetime import datetime, timezone
+from datetime import datetime, timezone, timedelta
 
 SOURCE_URL = "https://magicrule.pages.dev/data/_shared/artifacts/GlobalAI_rules_188406728e7abf06.list"
 OUTPUT_FILE = "AI.list"
@@ -94,11 +94,11 @@ def main():
         new_line = new_line.replace("HOST,", "DOMAIN,")
         proxy_rules.append(new_line)
 
-    from datetime import datetime, timezone, timedelta
+    # 使用北京时间
     now = (datetime.now(timezone.utc) + timedelta(hours=8)).strftime("%Y-%m-%d %H:%M:%S")
     header = f"""# NAME: AI
 # SOURCE: MagicRule GlobalAI (auto filtered)
-# UPDATED: {now}
+# UPDATED: {now} (北京时间)
 # NOTE: 已自动移除国内域名 + 不支持的规则类型（仅保留苹果/PC通用格式）
 # RULES: {len(proxy_rules)} (removed {removed})
 # POLICY: {POLICY_GROUP}
@@ -106,7 +106,7 @@ def main():
 
 """
 
-     with open(OUTPUT_FILE, "w", encoding="utf-8") as f:
+    with open(OUTPUT_FILE, "w", encoding="utf-8") as f:
         f.write(header)
         f.write("\n".join(proxy_rules))
         f.write("\n")
