@@ -1,8 +1,8 @@
 # NAME: AI
 # SOURCE: MagicRule GlobalAI (auto filtered)
-# UPDATED: 2026-11-26 10:02:17 (北京时间)
+# UPDATED: 2026-11-27 10:02:00 (北京时间)
 # NOTE: 已自动移除国内域名 + 不支持的规则类型（仅保留苹果/PC通用格式）
-# RULES: 379 (removed 58)
+# RULES: 380 (removed 58)
 # POLICY: AI
 # COMPATIBLE: Quantumult X / Surge / Stash / Loon / Clash / Mihomo / sing-box
 
@@ -203,6 +203,7 @@ DOMAIN-SUFFIX,geller-pa.googleapis.com,AI
 DOMAIN-SUFFIX,gemini.google,AI
 DOMAIN-SUFFIX,gemini.google.com,AI
 DOMAIN-SUFFIX,gemini.gstatic.com,AI
+DOMAIN-SUFFIX,gemma.ai,AI
 DOMAIN-SUFFIX,generativeai.google,AI
 DOMAIN-SUFFIX,generativelanguage.googleapis.com,AI
 DOMAIN-SUFFIX,genspark.ai,AI
